@@ -13,7 +13,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
-# Quick-start development settings - unsuitable for production
+# Quick-start development setting - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -50,9 +50,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'setting.urls'
+ROOT_URLCONF = 'settings.urls'
 
-WSGI_APPLICATION = 'setting.wsgi.application'
+WSGI_APPLICATION = 'settings.wsgi.application'
 
 
 # Database
@@ -68,7 +68,7 @@ DATABASES = {
 SESSION_ENGINE = 'redis_sessions.session'
 SESSION_REDIS_HOST = '127.0.0.1'
 SESSION_REDIS_PORT = 6379
-SESSION_REDIS_PASSWORD = 'nameLR9969'
+# SESSION_REDIS_PASSWORD = 'nameLR9969'
 SESSION_REDIS_DB = 0
 SESSION_REDIS_PREFIX = 'session'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False

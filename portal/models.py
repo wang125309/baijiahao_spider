@@ -19,4 +19,3 @@ class UserProfile(models.Model):
     password = models.CharField(max_length=128)
     register_time = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(auto_now=True)
-    last_login_ip = models.IPAddressField(null=True)

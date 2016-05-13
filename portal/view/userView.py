@@ -1,6 +1,5 @@
 from django.http import JsonResponse
 
-from portal.cache.userCache import user_cache
 
 from portal.func.functionCommon import *
 
