@@ -1,0 +1,35 @@
+nav.pagination-bar(ng-show="count>1")
+    ul.pagination
+        li(ng-show="page-1>0")
+            a(href="javascript:;",ng-click="goToPage(page-1)",aria-label="上一页")
+                span(aria-hidden="true") &laquo;
+        li(ng-show="page-4>0")
+            a(href="javascript:;",ng-click="goToPage(page-4)")
+                span {{ page-4 }}
+        li(ng-show="page-3>0")
+            a(href="javascript:;",ng-click="goToPage(page-3)")
+                span {{ page-3 }}
+        li(ng-show="page-2>0")
+            a(href="javascript:;",ng-click="goToPage(page-2)")
+                span {{ page-2 }}
+        li(ng-show="page-1>0")
+            a(href="javascript:;",ng-click="goToPage(page-1)")
+                span {{ page-1 }}
+        li.active
+            a(href="javascript:;",ng-click="goToPage(page)")
+                span {{ page }}
+        li(ng-show="page+1<=count")
+            a(href="javascript:;",ng-click="goToPage(page+1)")
+                span {{ page+1 }}
+        li(ng-show="page+2<=count")
+            a(href="javascript:;",ng-click="goToPage(page+2)")
+                span {{ page+2 }}
+        li(ng-show="page+3<=count")
+            a(href="javascript:;",ng-click="goToPage(page+3)")
+                span {{ page+3 }}
+        li(ng-show="page+4<=count")
+            a(href="javascript:;",ng-click="goToPage(page+4)")
+                span {{ page+4 }}
+        li(ng-show="page+1<=count")
+            a(href="#",aria-label="下一页",ng-click="goToPage(page+1)")
+                span(aria-hidden="true") &raquo;

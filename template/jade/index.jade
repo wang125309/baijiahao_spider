@@ -1,0 +1,127 @@
+include ./lib/header.jade
+link(href="/static/css/index.css",rel="stylesheet",type="text/css")
+script(language="javascript",src="/static/js/index.js")
+body.skin-black.fixed(ng-controller="Ctrl")
+    div.content.body
+        button.btn(class="{{type==i.id?'btn-danger':'btn-default'}}",ng-repeat="i in types",style="margin-right:10px",ng-click="select_type(i.id)") {{i.name}}
+        button.btn.btn-primary(style="margin-right:10px",data-target="#new",data-toggle="modal") 添加分类
+        button.btn.btn-primary(style="margin-right:10px",data-target="#delete",data-toggle="modal") 删除分类
+        button.btn.btn-primary(style="margin-right:10px",data-target="#upload",data-toggle="modal") 上传监控源
+        button.btn.btn-primary(style="margin-right:10px",ng-click="download()",data-toggle="modal") 下载监控源
+        div(style="margin-top:15px")
+            span 百家号发文数量：{{total.cnt}}
+            span(style="margin-left:10px") 竞品数量：{{total.op_cnt}}
+            span(style="margin-left:10px") 实时同步率：{{total.same*100}}%
+            span(style="margin-left:10px") 加权值：{{total.weight}}
+
+        table(class="table table-striped")
+            tr
+                th 百家号用户名
+                th 百家号更新
+                th 加权值
+                th 竞品平台用户名
+                th 竞品平台更新
+                th 同步条数
+                th 状态
+                th 操作
+            tr(ng-repeat="i in data")
+                td {{i.user}}
+                td
+                    a(href="{{i.url}}",target="_blank") {{i.cnt}}
+                td {{i.weight}}
+                td {{i.op_user}}
+                td
+                    a(href="{{i.op_url}}",target="_blank") {{i.op_cnt}}
+                td {{i.same+i.weight}}
+                td
+                    span(style="color:{{((i.weight+i.same)<i.op_cnt)?'red':((i.weight+i.same)==i.op_cnt)?'green':'#333'}}") 状态
+                td
+                    a(href="javascript:;",data-target="#weight",ng-click="editForm(i)",data-toggle="modal") 修改加权值
+                    a(style="margin-left:10px",href="javascript:;",data-target="#delete_user",ng-click="editForm(i)",data-toggle="modal") 删除
+        include ./lib/pagination.jade
+div#weight.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 修改加权值
+            div.modal-body
+                .form-group
+                    label 修改加权值
+                    input.form-control(ng-model="weight")
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-primary(ng-click="change_weight()",type="button",data-dismiss="modal") 确定
+div#new.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 新增分类
+            div.modal-body
+                .form-group
+                    label 分类名称
+                    input.form-control(ng-model="obj.name")
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-primary(ng-click="save()",type="button",data-dismiss="modal") 确定
+div#delete.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="删除分类")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 删除分类（删除后无法恢复）
+            div.modal-body
+                .form-group
+                    label 删除分类
+                    select.form-control(ng-options="i.id as i.name for  i in types",ng-model="delete_type_id")
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-danger(ng-click="delete()",type="button",data-dismiss="modal") 删除
+div#delete_user.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="删除用户")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 删除用户（删除后无法恢复）
+            div.modal-body
+                .form-group
+                    label 确定要删除{{view.user}}吗？
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-danger(ng-click="delete_user()",type="button",data-dismiss="modal") 删除
+div#upload.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="上传监控源")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 上传监控源
+            div.modal-body
+                .form-group
+                    label 上传监控源
+                    form#upload-form
+                        input.form-control(type="file",name="file")
+                        input(type="hidden",name="type",value="{{type}}")
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-primary(ng-click="upload()",type="button",data-dismiss="modal") 确定
+div#video.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="拒绝")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 设置为回看模式
+            div.modal-body
+                .form-group 确定要设置为回看模式吗？
+                .form-group
+                    lable 输入回看地址
+                    input.form-control(ng-model="video_obj.videoUrl")
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-dangous(ng-click="video()",type="button",data-dismiss="modal") 确定

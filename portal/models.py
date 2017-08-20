@@ -1,21 +1,77 @@
 from django.db import models
-
+import datetime
 
 # Create your models here.
 
-class User(models.Model):
-    user_id = models.CharField(max_length=127, unique=True)
-    name = models.CharField(max_length=127,null=True)
-    mobile = models.CharField(max_length=13,null=True)
-    email = models.CharField(max_length=64,null=True)
-    sex = models.CharField(max_length=4,null=True)
-    age = models.IntegerField(null=True)
-    real_name = models.CharField(max_length=64,null=True)
-    id_card = models.CharField(max_length=64,null=True)
+class Type(models.Model):
+    name = models.CharField(max_length=256)
+    datetime = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(default=1) #1online 0offline
+    def message(self):
+        return {
+            'id' : self.id,
+            'name' : self.name,
+            'datetime' : self.datetime
+        }
+class FileType(models.Model):
+    filePath = models.CharField(max_length=512)
+    datetime = models.DateTimeField(auto_now=True)
+    type = models.ForeignKey(Type,null=True)
+    def message(self):
+        return {
+            'id' : self.id,
+            'filePath' : self.filePath,
+            'type' : self.type
+        }
 
+class Data(models.Model):
+    title = models.CharField(max_length=512)
+    username = models.CharField(max_length=128)
+    desc = models.CharField(max_length=256)
+    datetime = models.DateTimeField(auto_now=True)
+    type = models.ForeignKey(Type,null=True)
+    origin = models.CharField(max_length=128)
+    origin_id = models.CharField(max_length=64)
+    origin_user_id = models.CharField(max_length=64)
+    url = models.CharField(max_length=256)
+    related_id = models.CharField(max_length=64,null=True)
+    def message(self):
+        return {
+            'id' : self.id,
+            'title' : self.title,
+            'username' : self.username,
+            'desc' : self.desc,
+            'datetime' : self.datetime,
+        }
 
-class UserProfile(models.Model):
-    user = models.ForeignKey(User)
-    password = models.CharField(max_length=128)
-    register_time = models.DateTimeField(auto_now=True)
-    last_login = models.DateTimeField(auto_now=True)
+class UserResource(models.Model):
+    user = models.CharField(max_length=256)
+    url = models.CharField(max_length=512)
+    op_user = models.CharField(max_length=256)
+    op_url = models.CharField(max_length=512)
+    datetime = models.DateTimeField(auto_now=True)
+    type = models.ForeignKey(Type,null=True)
+    weight = models.IntegerField(default=0)
+    def message(self):
+
+        dt = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt = dt.replace(hour=9).replace(minute=30).replace(second=0)
+        data = Data.objects.filter(datetime__gt=dt).filter(url=self.url)
+        op_data = Data.objects.filter(datetime__gt=dt).filter(url=self.op_url)
+        cnt = 0
+        for i in data:
+            for j in op_data:
+                if i.title == j.title :
+                    cnt += 1
+        return {
+            'id' : self.id,
+            'user' : self.user,
+            'url' : self.url,
+            'cnt' : len(data),
+            'weight' : self.weight,
+            'op_user' : self.op_user,
+            'op_url' : self.op_url,
+            'op_cnt' : len(op_data),
+            'same' : cnt,
+            'datetime' : self.datetime
+        }

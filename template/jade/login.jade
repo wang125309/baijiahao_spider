@@ -1,0 +1,14 @@
+include ./lib/header.jade
+link(href="/static/css/login.css",rel="stylesheet",type="text/css")
+script(language="javascript",src="/static/js/login.js")
+body(ng-controller="loginCtrl")
+    div.login
+        div.title 管理后台
+        form.clearfix
+            div.form-group
+                label(for="name") 用户名
+                input#name.form-control(type="text",placeholder="输入您的用户名",ng-model="user.uname")
+            div.form-group
+                label(for="password") 密码
+                input#password.form-control(type="password",placeholder="输入您的密码",ng-model="user.passwd")
+            button#login(class="btn btn-primary clearfix",type="button",ng-click="login()") 登录

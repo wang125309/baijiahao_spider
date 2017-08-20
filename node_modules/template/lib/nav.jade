@@ -1,0 +1,138 @@
+header.main-header
+    a.logo(href='/admin/company')
+        | 百度校园APP管理后台
+    nav.navbar.navbar-static-top(role='navigation')
+
+        .navbar-custom-menu
+            ul.nav.navbar-nav
+                li.dropdown
+                    a.dropdown-toggle(href='#', data-toggle='dropdown')
+                        span.hidden-xs #{uname}
+                    ul.dropdown-menu
+                        li.footer
+                            a.btn.btn-default.btn-flat(href='#') 退出登录
+
+
+
+    script.
+
+        var AdminLTEOptions = {
+            navbarMenuSlimscroll: true,
+            sidebarExpandOnHover: true,
+            //BoxRefresh Plugin
+
+            enableBoxRefresh: true,
+            //Bootstrap.js tooltip
+            enableBSToppltip: true
+
+        };
+
+.main-sidebar
+    .sidebar
+        ul.sidebar-menu
+
+            li.treeview(class="{{ company_active }}")
+                a(href='/campus/baidu/xiaoyuan/admin/xxx86/company')
+                    span 公司信息管理
+            li.treeview(class="{{ profession_active }}")
+                a(href='/campus/baidu/xiaoyuan/admin/xxx86/profession')
+                    span 职场信息管理
+            li.treeview(class="{{ push_active }}")
+                a(href='/campus/baidu/xiaoyuan/admin/xxx86/push')
+                    span 推送管理
+            li.treeview(class="{{ score_lottery_active }}")
+                a(href='/campus/baidu/xiaoyuan/admin/xxx86/score_lottery')
+                    span 积分夺宝管理
+            li.treeview(class="{{ total_active }}")
+                a(href='/campus/baidu/xiaoyuan/admin/xxx86/total')
+                    span 数据统计
+            li.treeview(class="{{ shop_active }}")
+                a(href='javascript:;')
+                    span 商品管理
+                ul.treeview-menu
+                    li
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/shop')
+                            span 商品管理
+                    li
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/exchange')
+                            span 商品兑换管理
+            li.treeview(class="{{ live_active }}")
+                a(href='/campus/baidu/xiaoyuan/admin/xxx86/live')
+                    span 直播管理
+            li.treeview(class="{{ user_active }}")
+                a(href='javascript:;')
+                    span 用户管理
+                ul.treeview-menu
+                    li
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/user')
+                            span 用户实名认证
+                    li(class="{{ user_message_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/user-message')
+                            span 用户管理
+                    li(class="{{ sign_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/sign-message')
+                            span 签到管理
+                    li.treeview(class="{{ report_active }}")
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/report")
+                            span 举报管理
+                    li.treeview(class="{{ backuser_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/backuser')
+                            span 后台用户管理
+                    li.treeview(class="{{ user_score_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/user-score')
+                            span 用户积分管理
+
+            li.treeview(class="{{ xiaoyuanzhaopin_active }}")
+                a(href='javascript:;')
+                    span 校招管理
+                ul.treeview-menu
+                    li.treeview(class="{{ backuser_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/xiaoyuanzhaopin')
+                            span 校招管理
+                    li.treeview(class="{{ user_score_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/xiaoyuanzhaopin-apply')
+                            span 校招申请管理
+                    li.treeview(class="{{ user_score_active }}")
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/xiaoyuanzhaopin-problem')
+                            span 校招练习题管理
+            li.treeview(class="{{ feed_active }}")
+                a(href="javascript:;")
+                    span 动态管理
+                ul.treeview-menu
+                    li
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/feed') 动态管理
+                        span
+                    li
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/campus-tag') 话题管理
+                        span
+                    li
+                        a(href='/campus/baidu/xiaoyuan/admin/xxx86/campus-tag-new') 话题动态管理
+                        span
+            li.treeview(class="{{ zhuanlan_active }}")
+                a(href="javascript:;")
+                    span 专栏管理
+                ul.treeview-menu
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/zhuanlan-type") 专栏类型管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/zhuanlan-league-user") 联盟成员管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/zhuanlan?class1=0") 运营专栏管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/zhuanlan?class1=1") 联盟专栏管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/zhuanlan_score") 专栏积分管理
+            li.treeview(class="{{ baijiahao_active }}")
+                a(href='javascript:;')
+                    span 百家号评审管理
+                ul.treeview-menu
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/baijiahao-group") 群组管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/baijiahao-article") 文章管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/baijiahao-count") 统计信息及其他管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/baijiahao-score") 积分列表管理
+                    li
+                        a(href="/campus/baidu/xiaoyuan/admin/xxx86/baijiahao-score-history") 积分记录管理
