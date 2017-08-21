@@ -161,7 +161,7 @@ def spider_youku(url,type):
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type)
+                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
             if time.find("小时前") :
                 dt = datetime.datetime.now() - datetime.timedelta(hours=int(time.split('小时前')[0]))
@@ -169,7 +169,7 @@ def spider_youku(url,type):
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type)
+                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
             if time.find("秒前"):
                 dt = datetime.datetime.now() - datetime.timedelta(seconds=int(time.split('秒前')[0]))
@@ -177,7 +177,7 @@ def spider_youku(url,type):
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type)
+                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
             if time.find("昨天") :
                 dt = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -187,7 +187,7 @@ def spider_youku(url,type):
                     if len(Data.objects.filter(title=title).filter(origin=u'优酷')) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type)
+                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
     except Exception,e:
         print e
@@ -210,7 +210,7 @@ def spider_kuaibao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'快报')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['id'],origin=u'快报',origin_user_id=key,url=url,type_id=type)
+                d = Data(title=i['title'],origin_id=i['id'],origin=u'快报',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
@@ -234,7 +234,7 @@ def spider_toutiao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',origin_user_id=key,url=url,type_id=type)
+                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
@@ -257,7 +257,7 @@ def spider_bilibili(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'bilibili')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['mid'],origin=u'bilibili',origin_user_id=key,url=url,type_id=type)
+                d = Data(title=i['title'],origin_id=i['mid'],origin=u'bilibili',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
@@ -284,7 +284,7 @@ def spider_baijiahao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'百家号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['id'],origin=u'百家号',origin_user_id=key,url=url,type_id=type)
+                d = Data(title=i['title'],origin_id=i['id'],origin=u'百家号',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
