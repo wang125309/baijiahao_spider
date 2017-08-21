@@ -155,11 +155,9 @@ def spider_youku(url,type):
             time = i.find("span",class_='v-publishtime')
             dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
             dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
-            dt = datetime.datetime.now()
             if time.find("分钟前") :
                 dt = datetime.datetime.now() - datetime.timedelta(minutes=int(time.split('分钟前')[0]))
                 if dt > dt1:
-
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
@@ -168,7 +166,6 @@ def spider_youku(url,type):
             if time.find("小时前") :
                 dt = datetime.datetime.now() - datetime.timedelta(hours=int(time.split('小时前')[0]))
                 if dt > dt1:
-
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
@@ -177,7 +174,6 @@ def spider_youku(url,type):
             if time.find("秒前"):
                 dt = datetime.datetime.now() - datetime.timedelta(seconds=int(time.split('秒前')[0]))
                 if dt > dt1:
-
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
@@ -187,9 +183,7 @@ def spider_youku(url,type):
                 dt = datetime.datetime.now() - datetime.timedelta(days=1)
                 dt.replace(hour=int(time.split(' ')[1].split(':')[0])-8)
                 dt.replace(minute=int(time.split(' ')[1].split(':')[1]))
-
                 if dt > dt1:
-
                     if len(Data.objects.filter(title=title).filter(origin=u'优酷')) :
                         pass
                     else :
@@ -297,7 +291,6 @@ def spider_baijiahao(url,type):
         "data" : j_json
     })
 
-@need_login
 def spider(request):
     u = UserResource.objects.all()
     for i in u:
