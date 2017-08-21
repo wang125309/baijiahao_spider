@@ -314,11 +314,8 @@ def spider(request):
 def get_total(request):
     dt = datetime.datetime.today() - datetime.timedelta(days=1)
     dt = dt.replace(hour=9).replace(minute=30).replace(second=0)
-    data = Data.objects.filter(type_id=request.GET.get('type')).filter(datetime__lt=dt)
-    cnt_baijiahao = 0
-    for i in data :
-        if i.url.split('.')[1] == 'baidu' :
-            cnt_baijiahao += 1
+    data = Data.objects.filter(type_id=request.GET.get('type')).filter(datetime__gt=dt)
+    cnt_baijiahao = len(data.filter(origin=u'百家号'))
 
     u = UserResource.objects.filter(type=request.GET.get('type'))
     same = 0
