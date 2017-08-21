@@ -328,7 +328,7 @@ def get_total(request):
         'data' : {
             'cnt' : cnt_baijiahao,
             'op_cnt' : op_cnt,
-            'same' : str(float(int(float((same+weight))/float(op_cnt)*100)/100)),
+            'same' : float((same+weight))/float(op_cnt),
             'weight' : weight
         }
     })
