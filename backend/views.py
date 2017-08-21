@@ -7,10 +7,11 @@ from backend.models import *
 import requests
 from bs4 import BeautifulSoup
 # Create your views here.
-from portal.models import Data,Type,FileType, UserResource
+from portal.models import Data,Type,FileType, UserResource, DayMessage
 import sys
 import uuid
 import xlrd
+import xlwt
 import datetime
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -236,6 +237,21 @@ def spider_toutiao(url,type):
             else :
                 d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
+    json_url = 'http://www.toutiao.com/c/user/article/?page_type=0&user_id='+key+'&max_behot_time=0&count=20&as=A1359929377D835&cp=59972D3853655E1'
+    j = requests.get(json_url)
+    j_json = json.loads(j.text)
+
+    for i in j_json['data']:
+
+        dt = datetime.datetime.utcfromtimestamp(i['behot_time'])
+        dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
+        if dt > dt1 :
+            if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
+                pass
+            else :
+                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d.save()
     return JsonResponse({
         "error_no" : "0",
         "data" : j_json
@@ -323,6 +339,20 @@ def get_total(request):
         op_cnt += k['op_cnt']
         same += k['same']
         weight += k['weight']
+    date = datetime.datetime.now()
+    year = date.year
+    month = date.month
+    day = date.day
+    d = DayMessage.objects.filter(datetime__year=year,datetime__month=month,datetime__day=day).filter(type_id=request.GET.get('type'))
+    if len(d):
+        d[0].baijiahao_count = cnt_baijiahao
+        d[0].op_count = op_cnt
+        d[0].same = same
+        d[0].weight = weight
+        d[0].save()
+    else :
+        d = DayMessage(baijiahao_count=cnt_baijiahao,op_count=op_cnt,same=same,weight=weight,datetime=date,type_id=request.GET.get('type'))
+        d.save()
     return JsonResponse({
         'error_no' : '0',
         'data' : {
@@ -332,6 +362,54 @@ def get_total(request):
             'weight' : weight
         }
     })
+
+
+@need_login
+def download_total(request):
+    d = DayMessage.objects.filter(type_id=request.GET.get('type'))
+    xls = xlwt.Workbook()
+    sheet = xls.add_sheet("data")
+    for i in xrange(0,len(d)):
+        message = d[i].message()
+        sheet.write(i, 0, message['id'])
+        sheet.write(i, 1, message['baijiahao_count'])
+        sheet.write(i, 2, message['op_count'])
+        sheet.write(i, 3, message['weight'])
+        sheet.write(i, 4, message['same'])
+        sheet.write(i, 5, message['type'])
+    date = datetime.datetime.now().strftime('%Y-%m-%d')
+    path = 'upload/'+date+'-'+str(d[0].type.name)+'-统计.xls'
+    xls.save(path)
+    return JsonResponse({
+        'error_no' : '0',
+        'data' : path
+    })
+
+
+@need_login
+def download_excel(request):
+    u = UserResource.objects.filter(type=request.GET.get('type'))
+    xls = xlwt.Workbook()
+    sheet = xls.add_sheet("data")
+    for i in xrange(0,len(u)):
+        message = u[i].message()
+        sheet.write(i, 0, message['id'])
+        sheet.write(i, 1, message['user'])
+        sheet.write(i, 2, message['url'])
+        sheet.write(i, 3, message['cnt'])
+        sheet.write(i, 4, message['weight'])
+        sheet.write(i, 5, message['op_user'])
+        sheet.write(i, 6, message['op_url'])
+        sheet.write(i, 7, message['op_cnt'])
+        sheet.write(i, 8, message['same'])
+    date = datetime.datetime.now().strftime('%Y-%m-%d')
+    path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
+    xls.save(path)
+    return JsonResponse({
+        'error_no' : '0',
+        'data' : path
+    })
+
 @need_login
 def delete_user(request):
     u = UserResource.objects.get(id=request.GET.get('id'))

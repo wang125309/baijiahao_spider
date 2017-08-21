@@ -31,9 +31,20 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
         });
         jQuery.get("/sys/get_total/?type="+$scope.type,function (data) {
             $scope.total = data.data;
+            $scope.total.same = Math.floor(parseFloat($scope.total.same)*10000)/100;
             $scope.$apply();
         });
     };
+    $scope.download_xls = function() {
+        jQuery.get('/sys/download_excel/?type='+$scope.type,function(data){
+            window.open(data.data);
+        })  ;
+    };
+    $scope.download_total = function() {
+        jQuery.get('/sys/download_total/?type='+$scope.type,function (data) {
+           window.open(data.data) ;
+        });
+    }
     $scope.select_type = function (id) {
         $scope.type = id;
         refresh();
