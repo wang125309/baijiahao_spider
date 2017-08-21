@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^sys/get_data/','backend.views.get_data'),
     url(r'^sys/spider/','backend.views.spider'),
     url(r'^sys/change_weight/','backend.views.change_weight'),
+    url(r'^sys/change_change/','backend.views.change_change'),
     url(r'^sys/delete_user/','backend.views.delete_user'),
     url(r'^sys/get_total/','backend.views.get_total'),
     url(r'^sys/download_data_resource/','backend.views.download_data_resource'),

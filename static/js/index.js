@@ -36157,6 +36157,14 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
             if(data.error_no == '0') refresh();
         });
     };
+    $scope.change_change = function() {
+        jQuery.get('/sys/change_change/',{
+            'id' : $scope.view.id,
+            'n' : $scope.change
+        },function (data) {
+            if(data.error_no == '0') refresh();
+        });
+    };
     $scope.goToPage = function(page) {
         start = (page-1)*limit;
         $scope.page = page;
@@ -36166,6 +36174,7 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
     $scope.editForm = function(edit) {
         $scope.view = edit;
         $scope.weight = edit.weight;
+        $scope.change = edit.change;
     };
     $scope.delete_user = function () {
         jQuery.get('/sys/delete_user/?id='+$scope.view.id,function (data) {

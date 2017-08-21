@@ -51,6 +51,7 @@ class DayMessage(models.Model):
     weight = models.IntegerField(null=True)
     same = models.IntegerField(null=True)
     type = models.ForeignKey(Type,null=True)
+    change = models.FloatField(null=True)
     def message(self):
         return {
             'id' : self.id,
@@ -58,7 +59,8 @@ class DayMessage(models.Model):
             'op_count' : self.op_count,
             'weight' : self.weight,
             'same' : self.same,
-            'type' : self.type.name
+            'type' : self.type.name,
+            'change' : self.change
         }
 
 
@@ -70,6 +72,7 @@ class UserResource(models.Model):
     datetime = models.DateTimeField(auto_now=True)
     type = models.ForeignKey(Type,null=True)
     weight = models.IntegerField(default=0)
+    change = models.IntegerField(default=0)
     def message(self):
 
         dt = datetime.datetime.today() - datetime.timedelta(days=1)
@@ -92,5 +95,6 @@ class UserResource(models.Model):
             'op_cnt' : len(op_data),
             'same' : cnt,
             'datetime' : self.datetime,
-            'type' : self.type.name
+            'type' : self.type.name,
+            'change' : self.change
         }

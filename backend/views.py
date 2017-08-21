@@ -1,4 +1,4 @@
-#encoding=utf8
+#coding=utf8
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
 from django.conf import settings
@@ -146,46 +146,58 @@ def change_weight(request):
     return JsonResponse({
         'error_no' : '0'
     })
+@need_login
+def change_change(request):
+    n = request.GET.get('n')
+    id = request.GET.get('id')
+    u = UserResource.objects.get(id=id)
+    u.change = int(n)
+    u.save()
+    return JsonResponse({
+        'error_no' : '0'
+    })
 def spider_youku(url,type):
     try:
-        j_url = url.split('?')[0] + '/video'+ '?' + url.split('?')[1]
+        j_url = url.split('?')[0] + '/videos'+ '?' + url.split('?')[1]
         j = requests.get(j_url)
         soup = BeautifulSoup(j.text)
         for i in soup.find_all("div",class_='v-meta'):
             title = i.find("div",class_="v-meta-title").find("a").attrs.get('title') if i.find("div",class_="v-meta-title").find("a").attrs.get('title') is not None else i.find("div",class_="v-meta-title").find("a").string
-            time = i.find("span",class_='v-publishtime')
+            time = i.find("span",class_='v-publishtime').string
             dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-            dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
-            if time.find("分钟前") :
-                dt = datetime.datetime.now() - datetime.timedelta(minutes=int(time.split('分钟前')[0]))
+            dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+            l = time.find("分钟前")
+            k = time.find("小时前")
+            j = time.find("秒前")
+            if l > 0:
+                print l
+                time = time[:l]
+                print time
+                dt = datetime.datetime.now() - datetime.timedelta(minutes=int(time))
                 if dt > dt1:
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
                         d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
-            if time.find("小时前") :
-                dt = datetime.datetime.now() - datetime.timedelta(hours=int(time.split('小时前')[0]))
+            if k > 0:
+                print k
+                time = time[:k]
+                print time
+                dt = datetime.datetime.now() - datetime.timedelta(hours=int(time))
+
                 if dt > dt1:
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
                         d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
-            if time.find("秒前"):
-                dt = datetime.datetime.now() - datetime.timedelta(seconds=int(time.split('秒前')[0]))
+            if j > 0:
+                time = time[:j]
+                print j
+                dt = datetime.datetime.now() - datetime.timedelta(seconds=int(time))
                 if dt > dt1:
                     if len(Data.objects.filter(title=title)) :
-                        pass
-                    else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
-                        d.save()
-            if time.find("昨天") :
-                dt = datetime.datetime.now() - datetime.timedelta(days=1)
-                dt.replace(hour=int(time.split(' ')[1].split(':')[0])-8)
-                dt.replace(minute=int(time.split(' ')[1].split(':')[1]))
-                if dt > dt1:
-                    if len(Data.objects.filter(title=title).filter(origin=u'优酷')) :
                         pass
                     else :
                         d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
@@ -203,9 +215,9 @@ def spider_kuaibao(url,type):
     j_json = json.loads(j.text)
 
     for i in j_json['info']['newsList']:
-        dt = datetime.datetime.utcfromtimestamp(i['timestamp'])
+        dt = datetime.datetime.fromtimestamp(i['timestamp'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
 
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'快报')) :
@@ -228,9 +240,9 @@ def spider_toutiao(url,type):
 
     for i in j_json['data']:
 
-        dt = datetime.datetime.utcfromtimestamp(i['behot_time'])
+        dt = datetime.datetime.fromtimestamp(i['behot_time'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
@@ -243,9 +255,9 @@ def spider_toutiao(url,type):
 
     for i in j_json['data']:
 
-        dt = datetime.datetime.utcfromtimestamp(i['behot_time'])
+        dt = datetime.datetime.fromtimestamp(i['behot_time'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
@@ -266,9 +278,9 @@ def spider_bilibili(url,type):
     j_json = json.loads(j.text)
 
     for i in j_json['data']['vlist']:
-        dt = datetime.datetime.utcfromtimestamp(i['created'])
+        dt = datetime.datetime.fromtimestamp(i['created'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'bilibili')) :
                 pass
@@ -295,7 +307,7 @@ def spider_baijiahao(url,type):
         dt = datetime.datetime.strptime(i['updated_at'],'%Y-%m-%d %H:%M:%S')
         dt = dt - datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=9).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'百家号')) :
                 pass
@@ -333,12 +345,14 @@ def get_total(request):
     weight = 0
     cnt_baijiahao = 0
     op_cnt = 0
+    change = 0
     for i in u:
         k = i.message()
         cnt_baijiahao += k['cnt']
         op_cnt += k['op_cnt']
         same += k['same']
         weight += k['weight']
+        change += k['change']
     date = datetime.datetime.now()
     year = date.year
     month = date.month
@@ -347,18 +361,18 @@ def get_total(request):
     if len(d):
         d[0].baijiahao_count = cnt_baijiahao
         d[0].op_count = op_cnt
-        d[0].same = same
+        d[0].same = float((same+weight))/float(op_cnt+change)
         d[0].weight = weight
         d[0].save()
     else :
-        d = DayMessage(baijiahao_count=cnt_baijiahao,op_count=op_cnt,same=same,weight=weight,datetime=date,type_id=request.GET.get('type'))
+        d = DayMessage(baijiahao_count=cnt_baijiahao,op_count=op_cnt,same=float((same+weight))/float(op_cnt+change),weight=weight,datetime=date,type_id=request.GET.get('type'))
         d.save()
     return JsonResponse({
         'error_no' : '0',
         'data' : {
             'cnt' : cnt_baijiahao,
             'op_cnt' : op_cnt,
-            'same' : float((same+weight))/float(op_cnt),
+            'same' : float((same+weight))/float(op_cnt+change),
             'weight' : weight
         }
     })

@@ -22,6 +22,7 @@ body.skin-black.fixed(ng-controller="Ctrl")
                 th 加权值
                 th 竞品平台用户名
                 th 竞品平台更新
+                th 竞品平台手动更新
                 th 同步条数
                 th 状态
                 th 操作
@@ -31,13 +32,16 @@ body.skin-black.fixed(ng-controller="Ctrl")
                     a(href="{{i.url}}",target="_blank") {{i.cnt}}
                 td {{i.weight}}
                 td {{i.op_user}}
+
                 td
                     a(href="{{i.op_url}}",target="_blank") {{i.op_cnt}}
+                td {{i.change}}
                 td {{i.same+i.weight}}
                 td
                     span(style="color:{{((i.weight+i.same)<i.op_cnt)?'red':((i.weight+i.same)==i.op_cnt)?'green':'#333'}}") 状态
                 td
                     a(href="javascript:;",data-target="#weight",ng-click="editForm(i)",data-toggle="modal") 修改加权值
+                    a(style="margin-left:10px",href="javascript:;",data-target="#change",ng-click="editForm(i)",data-toggle="modal") 修改竞品平台手动更新
                     a(style="margin-left:10px",href="javascript:;",data-target="#delete_user",ng-click="editForm(i)",data-toggle="modal") 删除
         include ./lib/pagination.jade
 div#weight.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
@@ -54,6 +58,20 @@ div#weight.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-label
             div.modal-footer
                 button.btn.btn-default(type="button",data-dismiss="modal") 取消
                 button.btn.btn-primary(ng-click="change_weight()",type="button",data-dismiss="modal") 确定
+div#change.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 修改竞品平台手动更新
+            div.modal-body
+                .form-group
+                    label 修改竞品平台手动更新
+                    input.form-control(ng-model="change")
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-primary(ng-click="change_change()",type="button",data-dismiss="modal") 确定
 div#new.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
     div.modal-dialog(role="document")
         div.modal-content
