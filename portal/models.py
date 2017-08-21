@@ -44,6 +44,22 @@ class Data(models.Model):
             'datetime' : self.datetime,
         }
 
+class DayMessage(models.Model):
+    datetime = models.DateField(auto_now=True)
+    baijiahao_count = models.IntegerField(null=True)
+    op_count = models.IntegerField(null=True)
+    weight = models.IntegerField(null=True)
+    same = models.IntegerField(null=True)
+    def message(self):
+        return {
+            'id' : self.id,
+            'baijiahao_count' : self.baijiahao_count,
+            'op_count' : self.op_count,
+            'weight' : self.weight,
+            'same' : self.same
+        }
+
+
 class UserResource(models.Model):
     user = models.CharField(max_length=256)
     url = models.CharField(max_length=512)

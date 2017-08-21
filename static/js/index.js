@@ -36193,7 +36193,7 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
     };
     $scope.save = function() {
         jQuery.get("/sys/new_type/",$scope.obj,function(data){
-            refresh();
+            refresh_type();
         });
     };
 }]);
