@@ -50,13 +50,15 @@ class DayMessage(models.Model):
     op_count = models.IntegerField(null=True)
     weight = models.IntegerField(null=True)
     same = models.IntegerField(null=True)
+    type = models.ForeignKey(Type,null=True)
     def message(self):
         return {
             'id' : self.id,
             'baijiahao_count' : self.baijiahao_count,
             'op_count' : self.op_count,
             'weight' : self.weight,
-            'same' : self.same
+            'same' : self.same,
+            'type' : self.type.name
         }
 
 
@@ -89,5 +91,6 @@ class UserResource(models.Model):
             'op_url' : self.op_url,
             'op_cnt' : len(op_data),
             'same' : cnt,
-            'datetime' : self.datetime
+            'datetime' : self.datetime,
+            'type' : self.type.name
         }

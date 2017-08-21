@@ -23,5 +23,8 @@ urlpatterns = [
     url(r'^sys/delete_user/','backend.views.delete_user'),
     url(r'^sys/get_total/','backend.views.get_total'),
     url(r'^sys/download_data_resource/','backend.views.download_data_resource'),
+    url(r'^sys/download_excel/','backend.views.download_excel'),
+    url(r'^sys/download_total/','backend.views.download_total'),
+
 
 ]
