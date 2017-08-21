@@ -312,24 +312,23 @@ def spider(request):
     })
 @need_login
 def get_total(request):
-    dt = datetime.datetime.today() - datetime.timedelta(days=1)
-    dt = dt.replace(hour=9).replace(minute=30).replace(second=0)
-    data = Data.objects.filter(type_id=request.GET.get('type')).filter(datetime__gt=dt)
-    cnt_baijiahao = len(data.filter(origin=u'百家号'))
-
     u = UserResource.objects.filter(type=request.GET.get('type'))
     same = 0
     weight = 0
+    cnt_baijiahao = 0
+    op_cnt = 0
     for i in u:
         k = i.message()
+        cnt_baijiahao += k['cnt']
+        op_cnt += k['op_cnt']
         same += k['same']
         weight += k['weight']
     return JsonResponse({
         'error_no' : '0',
         'data' : {
             'cnt' : cnt_baijiahao,
-            'op_cnt' : len(data) - cnt_baijiahao,
-            'same' : float(int(100*float((same+weight))/float(len(data)-cnt_baijiahao)))/100,
+            'op_cnt' : op_cnt,
+            'same' : float(int(100*float((same+weight))/float(op_cnt)))/100,
             'weight' : weight
         }
     })
