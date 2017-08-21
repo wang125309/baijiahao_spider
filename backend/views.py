@@ -314,11 +314,12 @@ def spider(request):
 def get_total(request):
     dt = datetime.datetime.today() - datetime.timedelta(days=1)
     dt = dt.replace(hour=9).replace(minute=30).replace(second=0)
-    data = Data.objects.filter(type_id=request.GET.get('type')).filter(datetime__gt=dt)
+    data = Data.objects.filter(type_id=request.GET.get('type')).filter(datetime__lt=dt)
     cnt_baijiahao = 0
     for i in data :
         if i.url.split('.')[1] == 'baidu' :
             cnt_baijiahao += 1
+
     u = UserResource.objects.filter(type=request.GET.get('type'))
     same = 0
     weight = 0
@@ -326,13 +327,12 @@ def get_total(request):
         k = i.message()
         same += k['same']
         weight += k['weight']
-    print len(data)
     return JsonResponse({
         'error_no' : '0',
         'data' : {
             'cnt' : cnt_baijiahao,
             'op_cnt' : len(data) - cnt_baijiahao,
-            'same' : float(int(100*float((same*2))/float(len(data))))/100,
+            'same' : float(int(100*float((same+weight))/float(len(data)-cnt_baijiahao)))/100,
             'weight' : weight
         }
     })
