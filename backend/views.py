@@ -239,10 +239,10 @@ def spider_toutiao(url,type):
     j_json = json.loads(j.text)
 
     for i in j_json['data']:
-
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
+        print dt>dt1
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
@@ -323,14 +323,14 @@ def spider(request):
     u = UserResource.objects.all()
     for i in u:
         try :
-            if i.url.split('.')[1] == 'baidu':
-                spider_baijiahao(i.url,i.type_id)
-            if i.op_url.split('.')[1] == 'bilibili':
-                spider_bilibili(i.op_url,i.type_id)
-            if i.op_url.split('.')[1] == 'youku':
-                spider_youku(i.op_url,i.type_id)
-            if i.op_url.split('.')[1] == 'qq':
-                spider_kuaibao(i.op_url,i.type_id)
+            # if i.url.split('.')[1] == 'baidu':
+            #     spider_baijiahao(i.url,i.type_id)
+            # if i.op_url.split('.')[1] == 'bilibili':
+            #     spider_bilibili(i.op_url,i.type_id)
+            # if i.op_url.split('.')[1] == 'youku':
+            #     spider_youku(i.op_url,i.type_id)
+            # if i.op_url.split('.')[1] == 'qq':
+            #     spider_kuaibao(i.op_url,i.type_id)
             if i.op_url.split('.')[1] == 'toutiao':
                 spider_toutiao(i.op_url,i.type_id)
         except Exception,e:
