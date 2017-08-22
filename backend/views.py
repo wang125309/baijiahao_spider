@@ -102,7 +102,7 @@ def upload_data_resource(request):
 
     book = xlrd.open_workbook(path)
     sheet = book.sheet_by_index(0)
-    for i in xrange(1,sheet.nrows) :
+    for i in xrange(0,sheet.nrows) :
         row = sheet.row_values(i)
         if len(UserResource.objects.filter(user=row[0])):
             u = UserResource.objects.get(user=row[0])
@@ -165,7 +165,7 @@ def spider_youku(url,type):
             title = i.find("div",class_="v-meta-title").find("a").attrs.get('title') if i.find("div",class_="v-meta-title").find("a").attrs.get('title') is not None else i.find("div",class_="v-meta-title").find("a").string
             time = i.find("span",class_='v-publishtime').string
             dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-            dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+            dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
             l = time.find("分钟前")
             k = time.find("小时前")
             j = time.find("秒前")
@@ -217,7 +217,7 @@ def spider_kuaibao(url,type):
     for i in j_json['info']['newsList']:
         dt = datetime.datetime.fromtimestamp(i['timestamp'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
 
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'快报')) :
@@ -242,7 +242,7 @@ def spider_toutiao(url,type):
 
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
@@ -257,7 +257,7 @@ def spider_toutiao(url,type):
 
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
@@ -280,7 +280,7 @@ def spider_bilibili(url,type):
     for i in j_json['data']['vlist']:
         dt = datetime.datetime.fromtimestamp(i['created'])
         dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'bilibili')) :
                 pass
