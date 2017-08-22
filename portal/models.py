@@ -60,7 +60,8 @@ class DayMessage(models.Model):
             'weight' : self.weight,
             'same' : self.same,
             'type' : self.type.name,
-            'change' : self.change
+            'change' : self.change,
+            'datetime' : self.datetime.strftime('%Y-%m-%d')
         }
 
 

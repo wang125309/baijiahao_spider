@@ -389,7 +389,7 @@ def download_total(request):
     sheet.write(0, 3, u'权重')
     sheet.write(0, 4, u'实时同步率')
     sheet.write(0, 5, u'类型')
-
+    sheet.write(0, 6, u'日期')
     for i in xrange(0,len(d)):
         message = d[i].message()
         sheet.write(i+1, 0, message['id'])
@@ -398,9 +398,11 @@ def download_total(request):
         sheet.write(i+1, 3, message['weight'])
         sheet.write(i+1, 4, message['same'])
         sheet.write(i+1, 5, message['type'])
+        sheet.write(i+1, 6, message['datetime'])
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     path = 'upload/'+date+'-'+str(d[0].type.name)+'-统计.xls'
     xls.save(path)
+
     return JsonResponse({
         'error_no' : '0',
         'data' : path
