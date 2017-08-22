@@ -49,7 +49,7 @@ class DayMessage(models.Model):
     baijiahao_count = models.IntegerField(null=True)
     op_count = models.IntegerField(null=True)
     weight = models.IntegerField(null=True)
-    same = models.IntegerField(null=True)
+    same = models.FloatField(null=True)
     type = models.ForeignKey(Type,null=True)
     change = models.FloatField(null=True)
     def message(self):
