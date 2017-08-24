@@ -13,6 +13,7 @@ import uuid
 import xlrd
 import xlwt
 import datetime
+import time
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -323,18 +324,19 @@ def spider(request):
     u = UserResource.objects.all()
     for i in u:
         try :
-            # if i.url.split('.')[1] == 'baidu':
-            #     spider_baijiahao(i.url,i.type_id)
-            # if i.op_url.split('.')[1] == 'bilibili':
-            #     spider_bilibili(i.op_url,i.type_id)
-            # if i.op_url.split('.')[1] == 'youku':
-            #     spider_youku(i.op_url,i.type_id)
-            # if i.op_url.split('.')[1] == 'qq':
-            #     spider_kuaibao(i.op_url,i.type_id)
+            if i.url.split('.')[1] == 'baidu':
+                spider_baijiahao(i.url,i.type_id)
+            if i.op_url.split('.')[1] == 'bilibili':
+                spider_bilibili(i.op_url,i.type_id)
+            if i.op_url.split('.')[1] == 'youku':
+                spider_youku(i.op_url,i.type_id)
+            if i.op_url.split('.')[1] == 'qq':
+                spider_kuaibao(i.op_url,i.type_id)
             if i.op_url.split('.')[1] == 'toutiao':
                 spider_toutiao(i.op_url,i.type_id)
         except Exception,e:
             print e
+        time.sleep(5)
     return JsonResponse({
         'error_no' : '0'
     })
