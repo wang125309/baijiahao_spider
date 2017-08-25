@@ -106,16 +106,10 @@ def upload_data_resource(request):
     sheet = book.sheet_by_index(0)
     for i in xrange(0,sheet.nrows) :
         row = sheet.row_values(i)
-        if len(UserResource.objects.filter(user=row[0])):
-            u = UserResource.objects.get(user=row[0])
-            u.url = row[1]
-            u.op_user = row[2]
-            u.op_url = row[3]
-            u.type_id = type
-            u.save()
-        else :
-            u = UserResource(user=row[0],url=row[1],op_user=row[2],op_url=row[3],type_id=type)
-            u.save()
+        for j in UserResource.objects.filter(type_id=type) :
+            j.delete()
+        u = UserResource(user=row[0],url=row[1],op_user=row[2],op_url=row[3],type_id=type)
+        u.save()
     return JsonResponse({
         'error_no' : '0',
         'data' : path
@@ -351,7 +345,7 @@ def spider(request):
                     spider_toutiao(i.op_url,i.type_id)
             except Exception,e:
                 print e
-            time.sleep(5)
+            time.sleep(10)
             cache.set('spider_flag',True)
     return JsonResponse({
         'error_no' : '0'
