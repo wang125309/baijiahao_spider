@@ -104,10 +104,11 @@ def upload_data_resource(request):
 
     book = xlrd.open_workbook(path)
     sheet = book.sheet_by_index(0)
+    for j in UserResource.objects.filter(type_id=type) :
+        j.delete()
     for i in xrange(0,sheet.nrows) :
         row = sheet.row_values(i)
-        for j in UserResource.objects.filter(type_id=type) :
-            j.delete()
+
         u = UserResource(user=row[0],url=row[1],op_user=row[2],op_url=row[3],type_id=type)
         u.save()
     return JsonResponse({
