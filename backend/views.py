@@ -14,6 +14,7 @@ import xlrd
 import xlwt
 import datetime
 import time
+from django.core.cache import cache
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -157,7 +158,9 @@ def change_change(request):
     return JsonResponse({
         'error_no' : '0'
     })
+
 def spider_youku(url,type):
+
     try:
         j_url = url.split('?')[0] + '/videos'+ '?' + url.split('?')[1]
         j = requests.get(j_url)
@@ -203,8 +206,10 @@ def spider_youku(url,type):
                     else :
                         d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
+
     except Exception,e:
         print e
+
     return JsonResponse({
         "error_no" : "0"
     })
@@ -321,22 +326,33 @@ def spider_baijiahao(url,type):
     })
 
 def spider(request):
-    u = UserResource.objects.all()
-    for i in u:
-        try :
-            if i.url.split('.')[1] == 'baidu':
-                spider_baijiahao(i.url,i.type_id)
-            if i.op_url.split('.')[1] == 'bilibili':
-                spider_bilibili(i.op_url,i.type_id)
-            if i.op_url.split('.')[1] == 'youku':
-                spider_youku(i.op_url,i.type_id)
-            if i.op_url.split('.')[1] == 'qq':
-                spider_kuaibao(i.op_url,i.type_id)
-            if i.op_url.split('.')[1] == 'toutiao':
-                spider_toutiao(i.op_url,i.type_id)
-        except Exception,e:
-            print e
-        time.sleep(5)
+
+    if cache.get('spider_flag') == True:
+        return JsonResponse({
+            'error_no' : '-1',
+            'data' : {
+                'message' : u'现在存在正在执行的任务，请不要重复执行'
+            }
+        })
+    else :
+        cache.set('spider_flag',False)
+        u = UserResource.objects.all()
+        for i in u:
+            try :
+                if i.url.split('.')[1] == 'baidu':
+                    spider_baijiahao(i.url,i.type_id)
+                if i.op_url.split('.')[1] == 'bilibili':
+                    spider_bilibili(i.op_url,i.type_id)
+                if i.op_url.split('.')[1] == 'youku':
+                    spider_youku(i.op_url,i.type_id)
+                if i.op_url.split('.')[1] == 'qq':
+                    spider_kuaibao(i.op_url,i.type_id)
+                if i.op_url.split('.')[1] == 'toutiao':
+                    spider_toutiao(i.op_url,i.type_id)
+            except Exception,e:
+                print e
+            time.sleep(5)
+            cache.set('spider_flag',True)
     return JsonResponse({
         'error_no' : '0'
     })
