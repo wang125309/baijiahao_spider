@@ -37,7 +37,9 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
     };
     $scope.spider = function() {
         jQuery.get('/sys/spider/',function (data) {
-
+            if(data.error != '0') {
+                alert(data.data.message);
+            }
         });
     };
     $scope.download_xls = function() {
