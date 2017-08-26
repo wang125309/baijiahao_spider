@@ -216,6 +216,7 @@ def spider_kuaibao(url,type):
 
     for i in j_json['info']['newsList']:
         dt = datetime.datetime.fromtimestamp(i['timestamp'])
+        dt = dt + datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
 
@@ -240,6 +241,7 @@ def spider_toutiao(url,type):
 
     for i in j_json['data']:
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
+        dt = dt + datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         print dt>dt1
@@ -256,6 +258,7 @@ def spider_toutiao(url,type):
     for i in j_json['data']:
 
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
+        dt = dt + datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
@@ -279,6 +282,7 @@ def spider_bilibili(url,type):
 
     for i in j_json['data']['vlist']:
         dt = datetime.datetime.fromtimestamp(i['created'])
+        dt = dt + datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
@@ -305,7 +309,6 @@ def spider_baijiahao(url,type):
 
     for i in j_json['items']:
         dt = datetime.datetime.strptime(i['updated_at'],'%Y-%m-%d %H:%M:%S')
-        dt = dt - datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
@@ -346,7 +349,7 @@ def spider(request):
             except Exception,e:
                 print e
             time.sleep(10)
-            cache.set('spider_flag',True)
+        cache.set('spider_flag',True)
     return JsonResponse({
         'error_no' : '0'
     })
