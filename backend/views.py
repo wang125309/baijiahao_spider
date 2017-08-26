@@ -108,7 +108,6 @@ def upload_data_resource(request):
         j.delete()
     for i in xrange(0,sheet.nrows) :
         row = sheet.row_values(i)
-
         u = UserResource(user=row[0],url=row[1],op_user=row[2],op_url=row[3],type_id=type)
         u.save()
     return JsonResponse({
@@ -163,7 +162,7 @@ def spider_youku(url,type):
         for i in soup.find_all("div",class_='v-meta'):
             title = i.find("div",class_="v-meta-title").find("a").attrs.get('title') if i.find("div",class_="v-meta-title").find("a").attrs.get('title') is not None else i.find("div",class_="v-meta-title").find("a").string
             time = i.find("span",class_='v-publishtime').string
-            dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+            dt1 = datetime.datetime.today()
             dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
             l = time.find("分钟前")
             k = time.find("小时前")
@@ -194,7 +193,7 @@ def spider_youku(url,type):
             if j > 0:
                 time = time[:j]
                 print j
-                dt = datetime.datetime.now() - datetime.timedelta(seconds=int(time))
+                dt = datetime.datetime.now()
                 if dt > dt1:
                     if len(Data.objects.filter(title=title)) :
                         pass
@@ -217,7 +216,7 @@ def spider_kuaibao(url,type):
 
     for i in j_json['info']['newsList']:
         dt = datetime.datetime.fromtimestamp(i['timestamp'])
-        dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
 
         if dt > dt1 :
@@ -241,7 +240,7 @@ def spider_toutiao(url,type):
 
     for i in j_json['data']:
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
-        dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         print dt>dt1
         if dt > dt1 :
@@ -280,7 +279,7 @@ def spider_bilibili(url,type):
 
     for i in j_json['data']['vlist']:
         dt = datetime.datetime.fromtimestamp(i['created'])
-        dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'bilibili')) :
@@ -307,7 +306,7 @@ def spider_baijiahao(url,type):
     for i in j_json['items']:
         dt = datetime.datetime.strptime(i['updated_at'],'%Y-%m-%d %H:%M:%S')
         dt = dt - datetime.timedelta(hours=8)
-        dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'百家号')) :

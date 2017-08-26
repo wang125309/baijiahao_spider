@@ -75,9 +75,8 @@ class UserResource(models.Model):
     weight = models.IntegerField(default=0)
     change = models.IntegerField(default=0)
     def message(self):
-
-        dt = datetime.datetime.today() - datetime.timedelta(days=1)
-        dt = dt.replace(hour=9).replace(minute=30).replace(second=0)
+        dt = datetime.datetime.today()
+        dt = dt.replace(hour=0).replace(minute=0).replace(second=0)
         data = Data.objects.filter(datetime__gt=dt).filter(url=self.url)
         op_data = Data.objects.filter(datetime__gt=dt).filter(url=self.op_url)
         cnt = 0
