@@ -256,7 +256,7 @@ def spider_toutiao(url,type):
     for i in j_json['data']:
 
         dt = datetime.datetime.fromtimestamp(i['behot_time'])
-        dt1 = datetime.datetime.today() - datetime.timedelta(days=1)
+        dt1 = datetime.datetime.today()
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
