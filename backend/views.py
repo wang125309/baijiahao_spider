@@ -299,7 +299,7 @@ def spider_baijiahao(url,type):
         if p[i] == 'app_id':
             key = p[i+1]
             break
-    json_url = 'http://baijiahao.baidu.com/api/content/article/listall?sk=super&ak=super&app_id='+key+'&_skip=0&_limit=10&status=in:publish,published&_preload_statistic=1&_timg_cover=50,172,1000&_cache=1'
+    json_url = 'http://baijiahao.baidu.com/api/content/article/listall?sk=super&ak=super&app_id='+key+'&_skip=0&_limit=30&status=in:publish,published&_preload_statistic=1&_timg_cover=50,172,1000&_cache=1'
     j = requests.get(json_url)
     j_json = json.loads(j.text)
 
