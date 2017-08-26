@@ -332,7 +332,7 @@ def spider(request):
             }
         })
     else :
-        cache.set('spider_flag',False)
+        cache.set('spider_flag',True)
         u = UserResource.objects.all()
         for i in u:
             try :
@@ -349,7 +349,7 @@ def spider(request):
             except Exception,e:
                 print e
             time.sleep(10)
-        cache.set('spider_flag',True)
+        cache.set('spider_flag',False)
     return JsonResponse({
         'error_no' : '0'
     })
