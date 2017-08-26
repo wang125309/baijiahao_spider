@@ -275,11 +275,13 @@ def spider_toutiao(url,type):
 
 def spider_bilibili(url,type):
     p = url.split('?')[0].split('/')
-    key = p[-1]
-    json_url = 'http://space.bilibili.com/ajax/member/getSubmitVideos?mid='+key+'&pagesize=25&tid=0&page=1&keyword=&order=pubdate'
+    key = p[-2]
+    json_url = 'http://space.bilibili.com/ajax/member/getSubmitVideos?mid='+key+'&pagesize=30&tid=0&page=1&keyword=&order=pubdate'
+    print json_url
     j = requests.get(json_url)
+    print j.text
     j_json = json.loads(j.text)
-
+    print j_json['data']['vlist']
     for i in j_json['data']['vlist']:
         dt = datetime.datetime.fromtimestamp(i['created'])
         dt = dt + datetime.timedelta(hours=8)
@@ -324,7 +326,7 @@ def spider_baijiahao(url,type):
 
 def spider(request):
 
-    if cache.get('spider_flag') == True:
+    if cache.get('spider_flag') == '1':
         return JsonResponse({
             'error_no' : '-1',
             'data' : {
@@ -332,7 +334,7 @@ def spider(request):
             }
         })
     else :
-        cache.set('spider_flag',True)
+        cache.set('spider_flag','1')
         u = UserResource.objects.all()
         for i in u:
             try :
@@ -349,7 +351,7 @@ def spider(request):
             except Exception,e:
                 print e
             time.sleep(10)
-        cache.set('spider_flag',False)
+        cache.set('spider_flag','0')
     return JsonResponse({
         'error_no' : '0'
     })
