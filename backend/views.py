@@ -307,7 +307,7 @@ def spider_baijiahao(url,type):
         dt = datetime.datetime.strptime(i['updated_at'],'%Y-%m-%d %H:%M:%S')
         dt = dt - datetime.timedelta(hours=8)
         dt1 = datetime.datetime.today()
-        dt1 = dt1.replace(hour=17).replace(minute=30).replace(second=0)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         if dt > dt1 :
             if len(Data.objects.filter(title=i['title']).filter(origin=u'百家号')) :
                 pass
