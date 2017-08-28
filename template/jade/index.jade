@@ -11,6 +11,7 @@ body.skin-black.fixed(ng-controller="Ctrl")
         button.btn.btn-primary(style="margin-right:10px",ng-click="download_xls()",data-toggle="modal") 下载列表
         button.btn.btn-primary(style="margin-right:10px",ng-click="download_total()",data-toggle="modal") 下载统计数据集合
         button.btn.btn-primary(style="margin-right:10px",ng-click="spider()",data-toggle="modal") 抓取数据
+        button.btn.btn-primary(style="margin-right:10px",ng-click="clear_weight()",data-toggle="modal") 清除加权值
         div(style="margin-top:15px")
             span 百家号发文数量：{{total.cnt}}
             span(style="margin-left:10px") 竞品数量：{{total.op_cnt}}

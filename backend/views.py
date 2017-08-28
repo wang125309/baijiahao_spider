@@ -271,8 +271,15 @@ def spider_toutiao(url,type):
         "error_no" : "0",
         "data" : j_json
     })
-
-
+@need_login
+def clear_weight(request):
+    u = UserResource.objects.all();
+    for i in u:
+        i.weight = 0
+        i.save()
+    return JsonResponse({
+        "error_no": "0"
+    })
 def spider_bilibili(url,type):
     p = url.split('?')[0].split('/')
     key = p[-2]

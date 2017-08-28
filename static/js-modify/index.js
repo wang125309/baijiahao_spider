@@ -42,6 +42,14 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
             }
         });
     };
+    $scope.clear_weight = function () {
+        jQuery.get('/sys/clear_weight/',function (data) {
+            if(data.error_no == '0') {
+                alert("清除成功");
+                refresh();
+            }
+        });
+    };
     $scope.download_xls = function() {
         jQuery.get('/sys/download_excel/?type='+$scope.type,function(data){
             window.open(data.data);
