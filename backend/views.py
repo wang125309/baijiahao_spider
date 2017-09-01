@@ -152,7 +152,6 @@ def change_change(request):
     return JsonResponse({
         'error_no' : '0'
     })
-
 def spider_youku(url,type):
 
     try:
@@ -162,6 +161,9 @@ def spider_youku(url,type):
         for i in soup.find_all("div",class_='v-meta'):
             title = i.find("div",class_="v-meta-title").find("a").attrs.get('title') if i.find("div",class_="v-meta-title").find("a").attrs.get('title') is not None else i.find("div",class_="v-meta-title").find("a").string
             time = i.find("span",class_='v-publishtime').string
+            href = i.find("a").attrs.get('href')
+            print href
+            print time
             dt1 = datetime.datetime.today()
             dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
             l = time.find("分钟前")
@@ -171,24 +173,24 @@ def spider_youku(url,type):
                 print l
                 time = time[:l]
                 print time
-                dt = datetime.datetime.now() - datetime.timedelta(minutes=int(time))
+                dt = datetime.datetime.now() - datetime.timedelta(minutes=int(l))
                 if dt > dt1:
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
+                        d = Data(title=title,origin_id='',origin=u'优酷',o_url="http:"+href,origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
             if k > 0:
-                print k
+
                 time = time[:k]
                 print time
-                dt = datetime.datetime.now() - datetime.timedelta(hours=int(time))
+                dt = datetime.datetime.now() - datetime.timedelta(hours=int(k))
 
                 if dt > dt1:
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
+                        d = Data(title=title,origin_id='',origin=u'优酷',o_url="http:"+href,origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
             if j > 0:
                 time = time[:j]
@@ -198,7 +200,7 @@ def spider_youku(url,type):
                     if len(Data.objects.filter(title=title)) :
                         pass
                     else :
-                        d = Data(title=title,origin_id='',origin=u'优酷',origin_user_id=url,url=url,type_id=type,datetime=dt)
+                        d = Data(title=title,origin_id='',origin=u'优酷',o_url="http:"+href,origin_user_id=url,url=url,type_id=type,datetime=dt)
                         d.save()
 
     except Exception,e:
@@ -224,7 +226,7 @@ def spider_kuaibao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'快报')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['id'],origin=u'快报',origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['id'],origin=u'快报',o_url=i['url'],origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
@@ -249,7 +251,7 @@ def spider_toutiao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',o_url='http://www.toutiao.com/'+i['url'],origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     json_url = 'http://www.toutiao.com/c/user/article/?page_type=0&user_id='+key+'&max_behot_time=0&count=20&as=A1359929377D835&cp=59972D3853655E1'
     j = requests.get(json_url)
@@ -265,7 +267,7 @@ def spider_toutiao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',o_url='http://www.toutiao.com/'+i['url'],origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
@@ -298,7 +300,7 @@ def spider_bilibili(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'bilibili')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['mid'],origin=u'bilibili',origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['mid'],origin=u'bilibili',o_url="http://www.bilibili.com/video/av"+i['aid']+'/',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
@@ -324,7 +326,7 @@ def spider_baijiahao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'百家号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['id'],origin=u'百家号',origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['id'],origin=u'百家号',o_url=i['url'],origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",

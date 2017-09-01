@@ -34,6 +34,7 @@ class Data(models.Model):
     origin_id = models.CharField(max_length=64)
     origin_user_id = models.CharField(max_length=64)
     url = models.CharField(max_length=256)
+    o_url = models.CharField(max_length=256,null=True)
     related_id = models.CharField(max_length=64,null=True)
     def message(self):
         return {
@@ -42,6 +43,7 @@ class Data(models.Model):
             'username' : self.username,
             'desc' : self.desc,
             'datetime' : self.datetime,
+            'o_url' : self.o_url
         }
 
 class DayMessage(models.Model):
@@ -96,5 +98,7 @@ class UserResource(models.Model):
             'same' : cnt,
             'datetime' : self.datetime,
             'type' : self.type.name,
-            'change' : self.change
+            'change' : self.change,
+            'title' : [i.message() for i in data],
+            'op_title' : [i.message() for i in op_data]
         }
