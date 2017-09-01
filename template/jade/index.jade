@@ -42,7 +42,8 @@ body.skin-black.fixed(ng-controller="Ctrl")
                 td
                     span(style="color:{{((i.weight+i.same)<i.op_cnt)?'red':((i.weight+i.same)==i.op_cnt)?'green':'#333'}}") 状态
                 td
-                    a(href="javascript:;",data-target="#weight",ng-click="editForm(i)",data-toggle="modal") 修改加权值
+                    a(href="javascript:;",data-target="#view",ng-click="editForm(i)",data-toggle="modal") 查看详情
+                    a(style="margin-left:10px;",href="javascript:;",data-target="#weight",ng-click="editForm(i)",data-toggle="modal") 修改加权值
                     a(style="margin-left:10px",href="javascript:;",data-target="#change",ng-click="editForm(i)",data-toggle="modal") 修改竞品平台手动更新
                     a(style="margin-left:10px",href="javascript:;",data-target="#delete_user",ng-click="editForm(i)",data-toggle="modal") 删除
         include ./lib/pagination.jade
@@ -60,6 +61,24 @@ div#weight.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-label
             div.modal-footer
                 button.btn.btn-default(type="button",data-dismiss="modal") 取消
                 button.btn.btn-primary(ng-click="change_weight()",type="button",data-dismiss="modal") 确定
+div#view.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
+    div.modal-dialog(role="document")
+        div.modal-content
+            div.modal-header
+                button.close(type="button",data-dismiss="modal",aria-label="Close")
+                    span(aria-hidden="true") &times;
+                h4.modal-title 查看
+            div.modal-body
+                .row.clearfix
+                    .col-md-6
+                        .form-group(ng-repeat="i in view.title")
+                            a(href="{{i.o_url}}",target="_blank",style="color:{{i.same == '1'?'green':'red'}}") {{i.title}}
+                    .col-md-6
+                        .form-group(ng-repeat="i in view.op_title")
+                            a(href="{{i.o_url}}",target="_blank",style="color:{{i.same == '1'?'green':'red'}}") {{i.title}}
+            div.modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal") 取消
+                button.btn.btn-primary(type="button",data-dismiss="modal") 确定
 div#change.modal.fade.bs-example-modal-sm(role="dialog",tabindex="-1",aria-labelledby="新增分类")
     div.modal-dialog(role="document")
         div.modal-content
