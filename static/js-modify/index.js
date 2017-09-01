@@ -50,6 +50,7 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
             }
         });
     };
+
     $scope.download_xls = function() {
         jQuery.get('/sys/download_excel/?type='+$scope.type,function(data){
             window.open(data.data);
@@ -90,6 +91,15 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
         $scope.view = edit;
         $scope.weight = edit.weight;
         $scope.change = edit.change;
+        for(var i=0;i<edit.title.length;i++) {
+            for(var j=0;j<edit.op_title.length;j++) {
+                if (edit.op_title[j].title == edit.title[i].title) {
+                    $scope.view.title[i].same = '1';
+                    $scope.view.op_title[j].same = '1';
+                    break;
+                }
+            }
+        }
     };
     $scope.delete_user = function () {
         jQuery.get('/sys/delete_user/?id='+$scope.view.id,function (data) {
