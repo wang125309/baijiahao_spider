@@ -300,7 +300,7 @@ def spider_bilibili(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'bilibili')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['mid'],origin=u'bilibili',o_url="http://www.bilibili.com/video/av"+i['aid']+'/',origin_user_id=key,url=json_url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['mid'],origin=u'bilibili',o_url="http://www.bilibili.com/video/av"+str(i['aid'])+'/',origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
