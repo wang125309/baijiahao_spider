@@ -251,7 +251,7 @@ def spider_toutiao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',o_url='http://www.toutiao.com/'+i['url'],origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',o_url='http://www.toutiao.com/'+str(i['source_url']),origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     json_url = 'http://www.toutiao.com/c/user/article/?page_type=0&user_id='+key+'&max_behot_time=0&count=20&as=A1359929377D835&cp=59972D3853655E1'
     j = requests.get(json_url)
@@ -267,7 +267,7 @@ def spider_toutiao(url,type):
             if len(Data.objects.filter(title=i['title']).filter(origin=u'头条号')) :
                 pass
             else :
-                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',o_url='http://www.toutiao.com/'+i['url'],origin_user_id=key,url=url,type_id=type,datetime=dt)
+                d = Data(title=i['title'],origin_id=i['item_id'],origin=u'头条号',o_url='http://www.toutiao.com/'+str(i['source_url']),origin_user_id=key,url=url,type_id=type,datetime=dt)
                 d.save()
     return JsonResponse({
         "error_no" : "0",
