@@ -100,8 +100,8 @@ class UserResource(models.Model):
             'datetime' : self.datetime,
             'type' : self.type.name,
             'change' : self.change,
-            'title' : [i.message_order() for i in data.order_by('title')],
-            'op_title' : [i.message_order() for i in op_data.order_by('title')],
+            'title' : [i.message() for i in data.order_by('title')],
+            'op_title' : [i.message() for i in op_data.order_by('title')],
             'pid' : self.pid
         }
     def message(self):
