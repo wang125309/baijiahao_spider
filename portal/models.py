@@ -46,7 +46,6 @@ class Data(models.Model):
             'datetime' : self.datetime,
             'o_url' : self.o_url
         }
-
 class DayMessage(models.Model):
     datetime = models.DateField(auto_now=True)
     baijiahao_count = models.IntegerField(null=True)
@@ -78,6 +77,33 @@ class UserResource(models.Model):
     weight = models.IntegerField(default=0)
     change = models.IntegerField(default=0)
     pid = models.IntegerField(default=0)
+    def message_title(self):
+        dt = datetime.datetime.today()
+        dt = dt.replace(hour=0).replace(minute=0).replace(second=0)
+        data = Data.objects.filter(datetime__gt=dt).filter(url=self.url)
+        op_data = Data.objects.filter(datetime__gt=dt).filter(url=self.op_url)
+        cnt = 0
+        for i in data:
+            for j in op_data:
+                if i.title == j.title :
+                    cnt += 1
+        return {
+            'id' : self.id,
+            'user' : self.user,
+            'url' : self.url,
+            'cnt' : len(data),
+            'weight' : self.weight,
+            'op_user' : self.op_user,
+            'op_url' : self.op_url,
+            'op_cnt' : len(op_data),
+            'same' : cnt,
+            'datetime' : self.datetime,
+            'type' : self.type.name,
+            'change' : self.change,
+            'title' : [i.message_order() for i in data.order_by('title')],
+            'op_title' : [i.message_order() for i in op_data.order_by('title')],
+            'pid' : self.pid
+        }
     def message(self):
         dt = datetime.datetime.today()
         dt = dt.replace(hour=0).replace(minute=0).replace(second=0)
