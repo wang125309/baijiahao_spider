@@ -474,38 +474,45 @@ def download_xls_title(request):
     u = UserResource.objects.filter(type=request.GET.get('type'))
 
     xls = xlwt.Workbook()
-    sheet = xls.add_sheet("data")
+    sheet = xls.add_sheet("data",cell_overwrite_ok=True)
     sheet.write(0, 0, u'id')
     sheet.write(0, 1, u'百家号用户')
     sheet.write(0, 2, u'百家号链接')
     sheet.write(0, 3, u'竞品链接')
     sheet.write(0, 4, u'标题')
-    sheet.write(0, 5, u'竞品标题')
-    sheet.write(0, 6, u'标志位')
+    sheet.write(0, 5, u'文章链接')
+    sheet.write(0, 6, u'百家号标志位')
+    sheet.write(0, 7, u'竞品标题')
+    sheet.write(0, 8, u'文章链接')
+    sheet.write(0, 9, u'竞品标志位')
     line = 0
     for i in xrange(0,len(u)):
         line += 1
         message = u[i].message_title()
-        for j in message['data']:
-            j['data']['same'] = 0
-        for j in message['op_data']:
-            j['op_data']['same'] = 0
-        for j in message['data']:
-            for k in message['op_data']:
-                if j['title'] == k['title']:
-                    j['same'] = k['same'] = 1
-
+        for j in message['title']:
+            j['same'] = 0
+        for j in message['op_title']:
+            j['same'] = 0
+        for j in message['title'] :
+            for k in message['op_title']:
+                if j['title'] == k['title'] :
+                    j['same'] = 1
+                    k['same'] = 1
         sheet.write(line, 0, message['id'])
         sheet.write(line, 1, message['user'])
         sheet.write(line, 2, message['url'])
         sheet.write(line, 3, message['op_url'])
-        for j in message['data']:
+        for j in message['title']:
             sheet.write(line, 4, j['title'])
+            sheet.write(line, 5, j['o_url'])
             sheet.write(line, 6, j['same'])
             line += 1
-        line -= len(message['op_data'])
-        for j in message['op_data']:
-            sheet.write(line, 5, j['title'])
+        line -= len(message['title'])
+        for j in message['op_title']:
+            print j
+            sheet.write(line, 7, j['title'])
+            sheet.write(line, 8, j['o_url'])
+            sheet.write(line, 9, j['same'])
             line += 1
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
