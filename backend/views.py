@@ -494,7 +494,7 @@ def download_excel(request):
         sheet.write(i+1, 6, message['op_url'])
         sheet.write(i+1, 7, message['op_cnt'])
         sheet.write(i+1, 8, message['same'])
-        sheet.write(i+1, 9, message['pid')
+        sheet.write(i+1, 9, message['pid'])
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
     xls.save(path)
