@@ -9,6 +9,7 @@ body.skin-black.fixed(ng-controller="Ctrl")
         button.btn.btn-primary(style="margin-right:10px",data-target="#upload",data-toggle="modal") 上传监控源
         button.btn.btn-primary(style="margin-right:10px",ng-click="download()",data-toggle="modal") 下载监控源
         button.btn.btn-primary(style="margin-right:10px",ng-click="download_xls()",data-toggle="modal") 下载列表
+        button.btn.btn-primary(style="margin-right:10px",ng-click="download_xls_yesterday()",data-toggle="modal") 下载昨日列表
         button.btn.btn-primary(style="margin-right:10px",ng-click="download_total()",data-toggle="modal") 下载统计数据集合
         button.btn.btn-primary(style="margin-right:10px",ng-click="spider()",data-toggle="modal") 抓取数据
         button.btn.btn-primary(style="margin-right:10px",ng-click="clear_weight()",data-toggle="modal") 清除加权值
@@ -26,6 +27,7 @@ body.skin-black.fixed(ng-controller="Ctrl")
                 th 竞品平台更新
                 th 竞品平台手动更新
                 th 同步条数
+                th 修改ID
                 th 状态
                 th 操作
             tr(ng-repeat="i in data")
@@ -39,6 +41,7 @@ body.skin-black.fixed(ng-controller="Ctrl")
                     a(href="{{i.op_url}}",target="_blank") {{i.op_cnt}}
                 td {{i.change}}
                 td {{i.same+i.weight}}
+                td {{i.pid}}
                 td
                     span(style="color:{{((i.weight+i.same)<i.op_cnt)?'red':((i.weight+i.same)==i.op_cnt)?'green':'#333'}}") 状态
                 td

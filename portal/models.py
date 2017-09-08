@@ -36,6 +36,7 @@ class Data(models.Model):
     url = models.CharField(max_length=256)
     o_url = models.CharField(max_length=256,null=True)
     related_id = models.CharField(max_length=64,null=True)
+
     def message(self):
         return {
             'id' : self.id,
@@ -76,6 +77,7 @@ class UserResource(models.Model):
     type = models.ForeignKey(Type,null=True)
     weight = models.IntegerField(default=0)
     change = models.IntegerField(default=0)
+    pid = models.IntegerField(default=0)
     def message(self):
         dt = datetime.datetime.today()
         dt = dt.replace(hour=0).replace(minute=0).replace(second=0)
@@ -100,5 +102,35 @@ class UserResource(models.Model):
             'type' : self.type.name,
             'change' : self.change,
             'title' : [i.message() for i in data],
-            'op_title' : [i.message() for i in op_data]
+            'op_title' : [i.message() for i in op_data],
+            'pid' : self.pid
+        }
+    def message_yesterday(self):
+        dt = datetime.datetime.today()
+        dt1 = dt - datetime.timedelta(day=1)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
+        dt2 = dt.replace(hour=0).replace(minute=0).replace(second=0)
+        data = Data.objects.filter(datetime__gt=dt1).filter(datetime__lt=dt2).filter(url=self.url)
+        op_data = Data.objects.filter(datetime__gt=dt1).filter(datetime__lt=dt2).filter(url=self.op_url)
+        cnt = 0
+        for i in data:
+            for j in op_data:
+                if i.title == j.title :
+                    cnt += 1
+        return {
+            'id' : self.id,
+            'user' : self.user,
+            'url' : self.url,
+            'cnt' : len(data),
+            'weight' : self.weight,
+            'op_user' : self.op_user,
+            'op_url' : self.op_url,
+            'op_cnt' : len(op_data),
+            'same' : cnt,
+            'datetime' : self.datetime,
+            'type' : self.type.name,
+            'change' : self.change,
+            'title' : [i.message() for i in data],
+            'op_title' : [i.message() for i in op_data],
+            'pid' : self.pid
         }

@@ -66,7 +66,6 @@ def new_type(request):
     return JsonResponse({
         'error_no' : '0'
     })
-
 @need_login
 def delete_type(request):
     t = Type.objects.filter(id=request.GET.get('id'))
@@ -108,7 +107,7 @@ def upload_data_resource(request):
         j.delete()
     for i in xrange(0,sheet.nrows) :
         row = sheet.row_values(i)
-        u = UserResource(user=row[0],url=row[1],op_user=row[2],op_url=row[3],type_id=type)
+        u = UserResource(user=row[0],url=row[1],op_user=row[2],op_url=row[3],type_id=type,pid=row[4])
         u.save()
     return JsonResponse({
         'error_no' : '0',
@@ -434,6 +433,38 @@ def download_total(request):
         'data' : path
     })
 
+@need_login
+def download_excel_yesterday(request):
+    u = UserResource.objects.filter(type=request.GET.get('type'))
+    xls = xlwt.Workbook()
+    sheet = xls.add_sheet("data")
+    sheet.write(0, 0, u'id')
+    sheet.write(0, 1, u'百家号用户')
+    sheet.write(0, 2, u'百家号url')
+    sheet.write(0, 3, u'百家号发布数量')
+    sheet.write(0, 4, u'权重')
+    sheet.write(0, 5, u'竞品发布数量')
+    sheet.write(0, 6, u'竞品url')
+    sheet.write(0, 7, u'竞品发布数量')
+    sheet.write(0, 8, u'同步数')
+    for i in xrange(0,len(u)):
+        message = u[i].message_yesterday()
+        sheet.write(i+1, 0, message['id'])
+        sheet.write(i+1, 1, message['user'])
+        sheet.write(i+1, 2, message['url'])
+        sheet.write(i+1, 3, message['cnt'])
+        sheet.write(i+1, 4, message['weight'])
+        sheet.write(i+1, 5, message['op_user'])
+        sheet.write(i+1, 6, message['op_url'])
+        sheet.write(i+1, 7, message['op_cnt'])
+        sheet.write(i+1, 8, message['same'])
+    date = datetime.datetime.now().strftime('%Y-%m-%d')
+    path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
+    xls.save(path)
+    return JsonResponse({
+        'error_no' : '0',
+        'data' : path
+    })
 
 @need_login
 def download_excel(request):

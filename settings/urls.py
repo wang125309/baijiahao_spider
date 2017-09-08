@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^sys/get_total/','backend.views.get_total'),
     url(r'^sys/download_data_resource/','backend.views.download_data_resource'),
     url(r'^sys/download_excel/','backend.views.download_excel'),
+    url(r'^sys/download_excel_yesterday/','backend.views.download_excel_yesterday'),
     url(r'^sys/download_total/','backend.views.download_total'),
     url(r'^sys/clear_weight/','backend.views.clear_weight')
 

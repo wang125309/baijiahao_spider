@@ -50,7 +50,11 @@ Ctrl = angular.module('app',['ngAnimate']).controller('Ctrl',['$scope',function(
             }
         });
     };
-
+    $scope.download_xls_yesterday = function() {
+        jQuery.get('/sys/download_excel_yesterday/?type='+$scope.type,function(data){
+            window.open(data.data);
+        })  ;
+    };
     $scope.download_xls = function() {
         jQuery.get('/sys/download_excel/?type='+$scope.type,function(data){
             window.open(data.data);
