@@ -107,7 +107,7 @@ class UserResource(models.Model):
         }
     def message_yesterday(self):
         dt = datetime.datetime.today()
-        dt1 = dt - datetime.timedelta(day=1)
+        dt1 = dt - datetime.timedelta(days=1)
         dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
         dt2 = dt.replace(hour=0).replace(minute=0).replace(second=0)
         data = Data.objects.filter(datetime__gt=dt1).filter(datetime__lt=dt2).filter(url=self.url)
