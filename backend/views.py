@@ -447,6 +447,7 @@ def download_excel_yesterday(request):
     sheet.write(0, 6, u'竞品url')
     sheet.write(0, 7, u'竞品发布数量')
     sheet.write(0, 8, u'同步数')
+    sheet.write(0, 9, u'修改ID')
     for i in xrange(0,len(u)):
         message = u[i].message_yesterday()
         sheet.write(i+1, 0, message['id'])
@@ -458,6 +459,7 @@ def download_excel_yesterday(request):
         sheet.write(i+1, 6, message['op_url'])
         sheet.write(i+1, 7, message['op_cnt'])
         sheet.write(i+1, 8, message['same'])
+        sheet.write(i+1, 9, message['pid'])
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
     xls.save(path)
@@ -480,6 +482,7 @@ def download_excel(request):
     sheet.write(0, 6, u'竞品url')
     sheet.write(0, 7, u'竞品发布数量')
     sheet.write(0, 8, u'同步数')
+    sheet.write(0, 9, u'修改ID')
     for i in xrange(0,len(u)):
         message = u[i].message()
         sheet.write(i+1, 0, message['id'])
@@ -491,6 +494,7 @@ def download_excel(request):
         sheet.write(i+1, 6, message['op_url'])
         sheet.write(i+1, 7, message['op_cnt'])
         sheet.write(i+1, 8, message['same'])
+        sheet.write(i+1, 9, message['pid')
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
     xls.save(path)
