@@ -507,13 +507,18 @@ def download_xls_title(request):
             sheet.write(line, 5, j['o_url'])
             sheet.write(line, 6, j['same'])
             line += 1
+        k_line = line
         line -= len(message['title'])
+
         for j in message['op_title']:
-            print j
             sheet.write(line, 7, j['title'])
             sheet.write(line, 8, j['o_url'])
             sheet.write(line, 9, j['same'])
             line += 1
+        if line < k_line :
+            line = k_line
+        else :
+            line -= 1
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     path = 'upload/'+date+'-'+str(u[0].type.name)+'-列表.xls'
     xls.save(path)
