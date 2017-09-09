@@ -79,8 +79,10 @@ class UserResource(models.Model):
     pid = models.IntegerField(default=0)
     def message_title(self):
         dt = datetime.datetime.today()
-        dt = dt.replace(hour=0).replace(minute=0).replace(second=0)
-        data = Data.objects.filter(datetime__gt=dt).filter(url=self.url)
+        dt1 = dt - datetime.timedelta(days=1)
+        dt1 = dt1.replace(hour=0).replace(minute=0).replace(second=0)
+        dt2 = dt.replace(hour=0).replace(minute=0).replace(second=0)
+        data = Data.objects.filter(datetime__gt=dt1).filter(datetime__lt=dt2).filter(url=self.url)
         op_data = Data.objects.filter(datetime__gt=dt).filter(url=self.op_url)
         cnt = 0
         for i in data:
