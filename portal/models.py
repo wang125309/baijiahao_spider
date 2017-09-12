@@ -76,7 +76,7 @@ class UserResource(models.Model):
     type = models.ForeignKey(Type,null=True)
     weight = models.IntegerField(default=0)
     change = models.IntegerField(default=0)
-    pid = models.IntegerField(default=0)
+    pid = models.BigIntegerField(default=0)
     def message_title(self):
         dt = datetime.datetime.today()
         dt1 = dt - datetime.timedelta(days=1)
